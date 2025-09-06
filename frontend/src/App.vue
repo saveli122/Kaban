@@ -11,7 +11,7 @@ import KanbanBoard from './components/KanbanBoard.vue'
       </div>
       <div class="header-actions">
         <a class="btn-ghost" href="https://vuejs.org/guide/introduction.html" target="_blank" rel="noreferrer">Документация Vue</a>
-        <a class="btn-ghost" href="https://laravel.com/docs" target="_blank" rel="noreferrer">Документация Laravel</a>
+        <a class="btn-ghost" href="https://laravel.com/docs" target="_blank" rel="noreferrer">Д123окументация Laravel</a>
       </div>
     </header>
 
