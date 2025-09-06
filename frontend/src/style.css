@@ -1,0 +1,309 @@
+:root {
+  --bg: #0f1223;
+  --panel: #14172b;
+  --panel-2: #1a1c3a;
+  --text: #e9ecff;
+  --muted: #b6b8d6;
+  --primary: #314697;
+  --primary-2: #5476ff;
+  --danger: #ff6b6b;
+  --ok: #2dd4bf;
+  --ring: 0 0 0 2px rgba(108,139,255,.35);
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+* { box-sizing: border-box; min-width: 0; }
+html, body, #app { height: 100%; }
+body {
+  margin: 0;
+  background: radial-gradient(1200px 800px at 5% -10%, #141125, #0b081e 60%);
+  color: var(--text);
+  font: 16px/1.4 Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+/* Buttons — responsive & overflow-safe */
+button {
+  appearance: none;
+  border: 0;
+  border-radius: 12px;
+  background: var(--primary);
+  color: #fff;
+  padding: 10px 20px;
+  font-weight: 300;
+  cursor: pointer;
+  box-shadow: 0 2px 26px rgba(84,118,255,.35);
+  transition: transform .06s ease, box-shadow .2s ease, background .2s ease;
+
+  /* не выезжать за контейнер */
+  max-width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+
+  /* не «прыгать» при :active / HMR */
+  transform: translateZ(0);
+  line-height: 1.2;
+
+  /* адаптивный размер текста */
+  font-size: clamp(12px, 0.28vw + 12px, 15px);
+  flex: 0 1 auto;
+}
+button:hover { background: var(--primary-2); }
+button:active { transform: translateY(1px); }
+
+/* Variants */
+.btn { padding: 8px 12px; min-height: 34px; }
+.btn-ghost {
+  background: transparent;
+  color: var(--muted);
+  padding: 8px 8px;
+  border-radius: 10px;
+  box-shadow: none;
+}
+.btn-ghost:hover { background: rgba(255,255,255,.06); color: var(--text); }
+.btn-icon {
+  width: 34px; min-width: 34px; height: 34px;
+  padding: 0; display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.btn-danger { color: var(--danger); background: transparent; box-shadow: none; }
+.btn-danger:hover { color: #fff; background: rgba(255,107,107,.2); }
+
+/* Inputs */
+.input, .textarea {
+  width: 100%;
+  background: #0d1022;
+  color: var(--text);
+  border: 1px solid #24284a;
+  border-radius: 10px;
+  padding: 10px 12px;
+  outline: none;
+  transition: box-shadow .2s;
+}
+.input:focus, .textarea:focus { box-shadow: var(--ring); }
+.textarea { min-height: 80px; resize: vertical; }
+
+/* Selects */
+.select {
+  width: 100%;
+  background: #0d1022;
+  color: var(--text);
+  border: 1px solid #24284a;
+  border-radius: 10px;
+  padding: 8px 10px;
+  outline: none;
+  transition: box-shadow .2s;
+  appearance: none;
+}
+.select:focus { box-shadow: var(--ring); }
+
+/* Status row in card */
+.status-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.status-row label { font-size: 12px; color: var(--muted); }
+.status-row .select { flex: 1 1 160px; min-width: 140px; }
+
+/* Layout */
+.app-shell { display: grid; grid-template-rows: auto 1fr; height: 100%; }
+.app-header {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; gap: 16px;
+  padding: 16px 20px; backdrop-filter: blur(8px);
+  background: linear-gradient(180deg, rgba(10,12,26,.85), rgba(10,12,26,.35));
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 800; }
+.brand-badge {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: linear-gradient(135deg, #7aa2ff, #5b68ff 60%, #5ef2dd);
+  box-shadow: 0 10px 20px rgba(108,139,255,.35);
+}
+.header-actions { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* Доска не шире вьюпорта, горизонтальная прокрутка — ок */
+.board-wrap { padding: 20px; overflow-x: auto; overflow-y: auto; }
+.board {
+  display: grid;
+  grid-auto-flow: column;
+  /* фиксированная разумная ширина колонок — не растём бесконечно */
+  grid-auto-columns: minmax(280px, 380px);
+  gap: 20px; align-items: start;
+  max-width: 100%;
+}
+.column {
+  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  border: 1px solid #262b4e;
+  border-radius: 16px;
+  padding: 14px; box-shadow: var(--shadow);
+  min-width: 0;
+}
+/* Ограничим ширину поля редактирования названия колонки */
+.column-title { display: flex; align-items: center; gap: 8px; min-width: 0; flex-wrap: nowrap; }
+.column-title h3 { margin: 0; font-size: 16px; overflow: hidden; text-overflow: ellipsis; flex: 0 1 25ch; max-width: 25ch; }
+/* Ensure edit controls fit: input grows, buttons don't shrink */
+.column-title .input { flex: 1 1 220px; min-width: 160px; }
+.column-title button { flex: 0 0 auto; max-width: none; }
+.column-actions { margin-left: auto; display: flex; gap: 6px; flex-wrap: nowrap; }
+.tasks { display: flex; flex-direction: column; gap: 15px; margin-top: 12px; }
+
+.card {
+  background: #150f30;
+  border: 1px solid #2a2f55;
+  border-radius: 14px;
+  padding: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.35);
+  min-width: 0;
+}
+.card:hover { border-color: #5e66b8; box-shadow: 0 6px 16px rgba(39, 54, 119, 0.35);}
+.card-title {
+  position: relative;
+  display: block;
+  font-weight: 800;
+  color: #fff;
+  background: rgb(63, 89, 191);
+  border: 1px solid #2a2f55;
+  border-radius: 10px;
+  padding: 8px 12px 8px 16px; /* слева запас под акцент-линию */
+  box-shadow: 0 2px 26px rgba(84,118,255,.35);
+}
+
+.card-title .input {
+  background: transparent;
+  border: 0;
+  padding: 4;
+  box-shadow: none;
+  color: #fff;
+}
+.card-title .input:focus { box-shadow: var(--ring); }
+.card-meta { display:flex; justify-content:space-between; gap:8px; margin-top:24px; font-size:12px; color: var(--muted); flex-wrap: wrap; }
+.card-meta span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card-desc { opacity: .8; font-size: 13px; margin-top: 16px; }
+.card-actions { display: flex; gap: 6px; margin-top: 16px; flex-wrap: nowrap; }
+.card-actions--hover {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transform: translateY(4px);
+  transition: opacity .15s ease, transform .15s ease, max-height .15s ease;
+}
+.card:hover .card-actions--hover,
+.card:focus-within .card-actions--hover {
+  opacity: 1;
+  max-height: 200px;   /* достаточно для ваших 3 кнопок */
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.inline-form { display: grid; gap: 8px; }
+.helper { color: var(--muted); font-size: 13px; }
+
+.empty {
+  opacity: .7;
+  border: 1px dashed #323861;
+  padding: 16px;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* Utilities */
+.actions-wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; min-width: 0; }
+.flex-1 { flex: 1 1 auto; min-width: 80px; }
+.ml-auto { margin-left: auto; }
+.btn-compact {
+  padding: 6px 10px;
+  font-size: 13px;
+  min-height: 30px;
+  max-width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  line-height: 1.2;
+}
+
+.edit-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  flex-wrap: wrap-reverse;          /* <-- ключевой момент: переносим элементы */
+}
+
+.edit-row .input {
+
+  min-width: 200px;         /* поле ужимается, но остаётся удобным */
+}
+
+.edit-row .btn,
+.edit-row .btn-ghost {
+  flex: 0 0 auto;           /* кнопки не растягиваются и не ломают ряд */
+}
+
+.add-popover { position: relative; display: block; }
+.add-popover .add-trigger { width: 100%; text-align: left; }
+ /* сама панель только плавно проявляется — без обрезания теней */
+ .add-popover .add-panel {
+   opacity: 0;
+   transform: translateY(-4px);
+   transition: opacity .18s ease, transform .18s ease;
+ }
+ .add-popover.is-open .add-panel,
+ .column:hover .add-popover:not(.is-open) .add-panel {
+   opacity: 1;
+   transform: translateY(0);
+ }
+ /* а вот эта обёртка отвечает за сворачивание по высоте */
+.add-popover .add-panel-clip {
+  box-sizing: content-box;   /* чтобы max-height не съедал padding */
+  padding: 8px;              /* зазор для тени вокруг полей */
+  margin: -8px;              /* визуально оставляем прежний размер */
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height .18s ease;
+}
+ .add-popover.is-open .add-panel-clip,
+ .column:hover .add-popover:not(.is-open) .add-panel-clip {
+   max-height: 436px;
+ }
+ .add-popover .add-panel-inner { display: grid; gap: 8px; }
+.add-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+/* зона сброса и минимальная высота пустой колонки */
+.droppable { min-height: 12px; }
+
+/* визуальные классы от vuedraggable/Sortable */
+.drag-ghost { opacity: .6; }
+.drag-chosen { transform: rotate(1deg); }
+
+/* курсор при захвате */
+.card-title { cursor: grab; }
+.card-title:active { cursor: grabbing; }
+
+/* внутри заголовка интерактивные элементы — обычные курсоры */
+.card-title input,
+.card-title textarea,
+.card-title button { cursor: auto; }
+
+
+
+/* Responsive tweaks */
+@media (max-width: 920px) {
+  .btn-icon { width: 30px; min-width: 30px; height: 30px; }
+  .btn { padding: 6px 10px; font-size: 13px; }
+}
+@media (max-width: 640px) {
+  .btn { padding: 6px 8px; font-size: 12px; }
+  .actions-wrap { justify-content: space-between; }
+}
+
+@media (max-width: 640px) {
+  .column-title h3 { flex-basis: 14ch; max-width: 14ch; }
+  .column-title .input { flex-basis: 18ch; max-width: 18ch; }
+}
